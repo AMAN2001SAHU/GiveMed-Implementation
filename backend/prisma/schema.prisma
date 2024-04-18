@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  id                  String @id @default(uuid()) 
+  email               String @unique
+  password            String
+  fname               String?
+  lname               String?
+  address             String
+  donations           donation[]
+}
+
+model medicines {
+  id                  Int     @id @default(autoincrement())
+  name                String? @db.VarChar(255)
+  prescription        String? @db.VarChar(50)
+  sell_type           String? @db.VarChar(100)
+  manufacturer        String? @db.VarChar(255)
+  salt                String? @db.VarChar(255)
+  mrp                 String? @db.VarChar(20)
+  uses                String?
+  alternate_medicines String?
+  side_effects        String?
+  how_to_use          String?
+  chemical_class      String? @db.VarChar(100)
+  habit_forming       String? @db.VarChar(3)
+  therapeutic_class   String? @db.VarChar(100)
+  action_class        String? @db.VarChar(100)
+  how_it_works        String?
+}
+
+model donation {
+  id            Int       @id @default(autoincrement())
+  name          String
+  donationDate  DateTime  @default(now())
+  dose          String
+  quantity      Int
+  mfgDate       DateTime
+  expDate       DateTime
+  donator       user      @relation(fields: [userId], references: [id])
+  userId        String
+}
